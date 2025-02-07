@@ -29,23 +29,43 @@ const reducer = (fav, item) => {
 
 const mostBlogs = (blogs) => {
   if (!blogs || blogs.length === 0) {
-    return 0;
+    return 0
   }
   const reducer = (most, item) => {
-    const blogscpy = _.filter(blogs, (n) => item.author === n.author);
+    const blogscpy = _.filter(blogs, (n) => item.author === n.author)
     if (blogscpy.length > most.blogs) {
-      return { author: item.author, blogs: blogscpy.length };
+      return { author: item.author, blogs: blogscpy.length }
     }
-    return most;
+    return most
   }
-  return blogs.reduce(reducer, { author: "None", blogs: 0 });
+  return blogs.reduce(reducer, { author: "None", blogs: 0 })
 }
+
+
+
+const mostLikes = (blogs) => {
+  if (!blogs || blogs.length === 0) {
+    return 0
+  }
+  const reducer = (most, item) => {
+    const blogscpy = _.filter(blogs, (n) => item.author === n.author)
+    const sumAllLikes = (a, b) => a + b.likes
+    const newLikes = blogscpy.reduce(sumAllLikes, 0)
+    if (newLikes > most.likes) {
+      return { author: item.author, likes: newLikes}
+    }
+    return most
+  }
+  return blogs.reduce(reducer, { author: "None", likes: 0 })
+}
+
 
 
   module.exports = {
     dummy,
     totalLikes,
     favoriteBlog,
-    mostBlogs
+    mostBlogs,
+    mostLikes
   }
 
