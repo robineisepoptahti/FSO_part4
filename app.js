@@ -8,8 +8,7 @@ const mongoose = require('mongoose')
 
 MONGODB_URI = config.MONGODB_URI
 
-
-const mongoUrl = process.env.MONGODB_URI
+const mongoUrl = config.MONGODB_URI
 mongoose.connect(mongoUrl)
 
 app.use(cors())

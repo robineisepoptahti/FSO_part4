@@ -3,12 +3,12 @@
     "version": "0.0.1",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js",
-        "dev": "nodemon index.js",
+        "start": "NODE_ENV=production node index.js",
+        "dev": "NODE_ENV=development nodemon index.js",
+        "test": "NODE_ENV=test node --test",
         "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist ../backend",
         "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
-        "lint": "eslint .",
-        "test": "node --test"
+        "lint": "eslint ."
     },
     "author": "Robin Widjeskog",
     "license": "MIT",
@@ -17,6 +17,7 @@
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "express": "^4.21.1",
+        "express-async-errors": "^3.1.1",
         "lodash": "^4.17.21",
         "mongoose": "^8.9.6",
         "morgan": "^1.10.0"
@@ -26,6 +27,7 @@
         "@stylistic/eslint-plugin-js": "^3.0.1",
         "eslint": "^9.19.0",
         "globals": "^15.14.0",
-        "nodemon": "^3.1.7"
+        "nodemon": "^3.1.7",
+        "supertest": "^7.0.0"
     }
 }
