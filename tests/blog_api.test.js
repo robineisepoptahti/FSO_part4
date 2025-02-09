@@ -35,8 +35,12 @@ const likelessBlog = {
   author: "Darwin4",
   url: "url4",
 } 
+const titlelessBlog = {
+  author: "Darwin4",
+  url: "url4",
+} 
 
-  describe('when there is initially 2 blogs saved', () => {
+  describe('API tests (initially 2 blogs saved)', () => {
 beforeEach(async () => {
     await Blog.deleteMany({})
     let blogObject = new Blog(initialBlogs[0])
@@ -101,4 +105,13 @@ test('test if likes is 0 when not defined', async () => {
   .expect('Content-Type', /application\/json/)
   assert.strictEqual(res.body.likes, 0)
 })
+
+test('test if status code 400 is returned when post has no title or url.', async () =>
+{
+  const res = await api
+  .post('/api/blogs')
+  .send(titlelessBlog)
+  .expect(400)
+}
+)
 })
