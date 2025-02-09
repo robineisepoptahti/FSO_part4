@@ -15,9 +15,18 @@ require('express-async-errors')
       response.status(400).end()
       return
     }
-
     const result = await blog.save()
     response.status(201).json(result)
+  })
+
+  notesRouter.delete('/:id', async (request, response) => {
+    const res = await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  })
+  
+  notesRouter.put('/:id', async (request, response) => {
+    const res = await Blog.findByIdAndUpdate(request.params.id, request.body,{ new: true })
+    response.json(res)
   })
   
   module.exports = notesRouter
