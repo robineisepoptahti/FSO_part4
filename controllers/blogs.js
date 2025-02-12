@@ -2,22 +2,36 @@ const notesRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
 require('express-async-errors')
+const jwt = require('jsonwebtoken')
 
  notesRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user')
     response.json(blogs)
     })
   
+  const getTokenFrom = request => {
+      const authorization = request.get('authorization')
+      if (authorization && authorization.startsWith('Bearer ')) {
+        return authorization.replace('Bearer ', '')
+      }
+      return null
+    }
+
     
   notesRouter.post('/', async (request, response) => {
 
-    const user = await User.find({})
+    const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+    if (!decodedToken.id) {
+      return response.status(401).json({ error: 'token invalid' })
+    }
+    const user = await User.findById(decodedToken.id)
+    
     const blog = new Blog({
       author: request.body.author,
       title: request.body.title,
       url: request.body.url,
       likes: request.body.likes,
-      user: user[0]._id}
+      user: user}
     )
     if (!blog.title || !blog.url)
     {
