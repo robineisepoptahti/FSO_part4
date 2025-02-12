@@ -7,6 +7,12 @@ const userSchema = mongoose.Schema({
         minlength: 3,
         unique: true 
       },
+    blogs: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Blog'
+        }
+      ],
     name: String,
     passwordHash: String
   })

@@ -1,15 +1,24 @@
 const notesRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
 require('express-async-errors')
 
  notesRouter.get('/', async (request, response) => {
-    const blogs = await Blog.find({})
+    const blogs = await Blog.find({}).populate('user')
     response.json(blogs)
     })
   
     
   notesRouter.post('/', async (request, response) => {
-    const blog = new Blog(request.body)
+
+    const user = await User.find({})
+    const blog = new Blog({
+      author: request.body.author,
+      title: request.body.title,
+      url: request.body.url,
+      likes: request.body.likes,
+      user: user[0]._id}
+    )
     if (!blog.title || !blog.url)
     {
       response.status(400).end()
