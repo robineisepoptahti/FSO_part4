@@ -14,13 +14,7 @@ const middleware = require('../utils/middleware')
 
     
   notesRouter.post('/', async (request, response) => {
-
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    } 
-    const user = await User.findById(decodedToken.id)
-    
+    const user = request.user
     const blog = new Blog({
       author: request.body.author,
       title: request.body.title,
@@ -40,13 +34,8 @@ const middleware = require('../utils/middleware')
 
 
   notesRouter.delete('/:id', async (request, response) => {
-
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    } 
     foundBlog = await Blog.findById(request.params.id)
-    if (decodedToken.id.toString() !== foundBlog.user.toString())
+    if (request.user.id.toString() !== foundBlog.user.toString())
     {
       return response.status(401).json({ error: 'invalid user for removing resource' })
     }
