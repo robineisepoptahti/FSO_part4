@@ -144,6 +144,29 @@ assert.strictEqual(res_len.body.length + 1, post_res_len.body.length)
 }
 )
 
+test('posting without token', async () =>
+{
+    //Here we are getting the length before adding
+    const res_len = await api
+    .get('/api/blogs')
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+//adding 1 blog.
+    const res_new_len = await api
+        .post('/api/blogs')
+        .send(blogToPost)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+//Getting the updated list of blogs
+const post_res_len = await api
+.get('/api/blogs')
+.expect(200)
+.expect('Content-Type', /application\/json/)
+assert.strictEqual(res_len.body.length, post_res_len.body.length)
+}
+)
+
 test('test if likes is 0 when not defined', async () => {
   //Cleaning the database
   await Blog.deleteMany({}) 
