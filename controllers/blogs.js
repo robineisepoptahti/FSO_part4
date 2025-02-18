@@ -14,6 +14,10 @@ const middleware = require('../utils/middleware')
 
     
   notesRouter.post('/', async (request, response) => {
+    if (request.token === null)
+    {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
     const user = request.user
     const blog = new Blog({
       author: request.body.author,
@@ -34,6 +38,10 @@ const middleware = require('../utils/middleware')
 
 
   notesRouter.delete('/:id', async (request, response) => {
+    if (request.token === null)
+      {
+        return response.status(401).json({ error: 'token missing or invalid' })
+      }
     foundBlog = await Blog.findById(request.params.id)
     if (request.user.id.toString() !== foundBlog.user.toString())
     {
